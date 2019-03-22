@@ -58,8 +58,11 @@ make build_image를 입력합니다.
 # 사용방법
 
 필요할때마다 make run_bash를 입력하여 가상머신에 연결된 bash를 실행할수있습니다.
+
 docker cp foo.txt env_baseline:/foo.txt
+
 docker cp env_baseline:/foo.txt foo.txt
+
 위 방법으로 간단히 가상머신과 파일을 주고받을수있습니다.
 
 필요에 따라 다른 의존성을 갖는 환경을 필요로 하는 다른 이미지가 필요할때는 makefile에서 image_name을 수정하고
