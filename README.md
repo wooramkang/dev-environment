@@ -66,6 +66,7 @@ docker cp env_baseline:/foo.txt foo.txt
 위 방법으로 간단히 가상머신과 파일을 주고받을수있습니다.
 
 필요에 따라 다른 의존성을 갖는 환경을 필요로 하는 다른 이미지가 필요할때는 makefile에서 image_name을 수정하고
+
 dockerfile을 조금 수정하여 make build_image를 실행하면 됩니다.
 
 필요에 따라 requiements.txt에 더 필요한 package를 입력해두면 다음에 build_image를 실행시킬때마다 추가적으로 설치합니다.
@@ -73,7 +74,10 @@ dockerfile을 조금 수정하여 make build_image를 실행하면 됩니다.
 # 가상화 머신에 문제 발생시
 
 가상머신은 완전히 독립된 환경으로 나중에 의존성오류나 사용간 문제가 발생하면
+
 원래환경 bash를 하나 실행한 후 sudo docker rmi env_baseline를 입력하고 나서
+
 완료되면 make build_image를 입력하여 다시 이미지를 생성해주시기만 하면됩니다.
+
 
 
