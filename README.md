@@ -1,8 +1,40 @@
-# dev-environment
-auto setting machine learning develop environment of mine including docker, shell scripts etc
 
-개발환경 ubuntu 16.04
-그래픽카드 드라이버까지는 설치가 되어있다는 가정아래 작성된 자동화 makefile 과 dockerfile
+# 필요한 개발환경
+
+적어도 
+
+ubuntu 또는 debian계열 리눅스가 설치된 PC
+
+그리고 해당 운영체제와 사용중인 GPU에 맞는 그래픽카드 드라이버 정도 까지는 설치가 되어있다는 가정아래
+
+작성된 자동화 makefile 과 dockerfile
+
+
+# 자동을 설치되는 가상머신의 개발환경 
+
+ubuntu 16.04
+
+docker-ce
+
+docker-engine
+
+dodocker-io
+
+nvidia-docker2
+
+CUDA 9.0
+
+CuDnn 7.0
+
+python 3.5
+
+tensorflow latest
+
+keras latest
+
+opencv 3.4.2 customed
+
+git
 
 # 실행 순서
 
@@ -19,7 +51,7 @@ make build_image를 입력합니다.
 (확신이 드시지 않는다면 2.를 실행하면 기존에 설치된 docker를 삭제하고 의존성에 맞는 docker를 다시 설치해줍니다.)
 
 4. 2. 또는 3.으로 모든 과정을 마치고 나서 
-make run_bash 를 입력하면 cuda, cudnn 설치등 복잡한 과정을 전부 생략하고 tensorflow , keras 등의 패키지도 자동으로 설치된 가상머신 
+make run_bash 를 입력하면 cuda, cudnn 설치등 복잡한 과정을 전부 자동으로 해주고 tensorflow , keras 등의 패키지도 자동으로 설치된 가상머신 
 env_baseline이 실행됩니다. 
 
 # 사용방법
@@ -29,6 +61,10 @@ docker cp foo.txt env_baseline:/foo.txt
 docker cp env_baseline:/foo.txt foo.txt
 위 방법으로 간단히 가상머신과 파일을 주고받을수있습니다.
 
+필요에 따라 다른 의존성을 갖는 환경을 필요로 하는 다른 이미지가 필요할때는 makefile에서 image_name을 수정하고
+dockerfile을 조금 수정하여 make build_image를 실행하면 됩니다.
+
+필요에 따라 requiements.txt에 더 필요한 package를 입력해두면 다음에 build_image를 실행시킬때마다 추가적으로 설치합니다.
 
 # 가상화 머신에 문제 발생시
 
