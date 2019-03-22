@@ -7,7 +7,7 @@ ubuntu 또는 debian계열 리눅스가 설치된 PC
 
 그리고 해당 운영체제와 사용중인 GPU에 맞는 그래픽카드 드라이버 정도 까지는 설치가 되어있다는 가정아래
 
-작성된 자동화 makefile 과 dockerfile
+작성된 자동화 makefile 과 dockerfile 입니다.
 
 
 # 자동을 설치되는 가상머신의 개발환경 
@@ -22,6 +22,8 @@ dodocker-io
 
 nvidia-docker2
 
+git
+
 CUDA 9.0
 
 CuDnn 7.0
@@ -34,8 +36,7 @@ keras latest
 
 opencv 3.4.2 customed
 
-git
-
+etc.....
 # 실행 순서
 
 1. bash를 하나 실행합니다.
