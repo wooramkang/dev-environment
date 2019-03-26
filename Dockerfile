@@ -100,7 +100,3 @@ RUN apt-get install -qqy x11-apps
 
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
-
-#how to transfer files to container
-#docker cp foo.txt mycontainer:/foo.txt
-#docker cp mycontainer:/foo.txt foo.txt

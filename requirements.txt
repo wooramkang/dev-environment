@@ -1,1 +1,1 @@
-#extra requirements packages for python
+#extra requirements
