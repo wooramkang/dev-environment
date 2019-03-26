@@ -43,16 +43,19 @@ keras latest
 opencv 3.4.2 customed
 
 etc.....
+
 # 실행 순서
 
 1. bash를 하나 실행합니다.
-2. make build_dependency를 입력합니다.
+
+2. 한번도 docker와 nvidia-docker를 사용하지 않았던 경우
+build_first_time를 입력합니다.
 해당과정에서 자동으로 docker, nvidia-docker와 관련 하여 필요한 그래픽드라이버 설정을 자동으로 잡아줍니다.
 또한 dockerfile을 자동으로 실행하여 env_baseline라는 도커 이미지를 생성합니다.
 또한 같은 이름으로 백그라운드에 deploy합니다.
 
 3. 기존에 docker 이미 사용중이고 nvidia-docker의 사용을 위한 세팅을 모두 완료한 분이시라면
-make build_image를 입력합니다.
+make build_only_image를 입력합니다.
 해당명령은 자동으로 dockerfile에 작성된 명령만을 추가적으로 실행하여 env_baseline이라는 도커이미지를 생성합니다.
 또한 같은 이름으로 백그라운드에 deploy합니다.
 (확신이 드시지 않는다면 2.를 실행하면 기존에 설치된 docker를 삭제하고 의존성에 맞는 docker를 다시 설치해줍니다.)
@@ -60,7 +63,10 @@ make build_image를 입력합니다.
 4. 모든 과정을 마치고 나면 머신러닝에 필요한 의존성관련 환경설정, 필요 라이브러리, 패키지 등이
 자동으로 설치된 가상머신 env_baseline이 생성되어 백그라운드에 올라가가 있게됩니다.
 
-5. make run_bash 를 입력하면 해당 가상머신의 bash를 실행합니다.
+4. dockerfile을 수정하고 같은 이름으로 이미지를 다시 빌드하고자 할때는 make build_image again을 입력합니다.
+
+6. make run_bash 를 입력하면 해당 가상머신의 bash를 실행합니다.
+
 
 # 사용방법
 
@@ -86,5 +92,6 @@ docker기반 가상머신은 완전히 독립된 환경으로 나중에 의존�
 
 완료되면 make build_image를 입력하여 다시 이미지를 생성해시기만 하면됩니다.
 
+# 
 
 

@@ -1,17 +1,25 @@
 # set name for envirments you want
 
-IMAGE_NAME=env_base
+IMAGE_NAME=env_baseline
 
 run_bash:
 	#GUI POSSIBLE
 	sudo docker exec -ti $(IMAGE_NAME) /bin/bash
 
+build_image_again:
+	#for build
+	sudo docker kill $(IMAGE_NAME) 
+	sudo docker rmi $(IMAGE_NAME)
+	sudo docker build -t $(IMAGE_NAME) .
+	#  					     "/home/username/..."
+	sudo docker run -d --runtime=nvidia --volume="/home/rd/.Xauthority:/root/.Xauthority:rw" --env="DISPLAY" --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+
 build_only_image:
 
 	#for test
 	#sudo docker run --runtime=nvidia --rm nvidia/cuda:9.0-base nvidia-smi
-	#for build
 
+	#for build
 	sudo docker build -t $(IMAGE_NAME) .
 	#  					     "/home/username/..."
 	sudo docker run -d --runtime=nvidia --volume="/home/rd/.Xauthority:/root/.Xauthority:rw" --env="DISPLAY" --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
