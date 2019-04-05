@@ -75,7 +75,9 @@ etc(다양한 서브 패키지, 서드파티 프로그램).....
 dockerfile을 열어보시면 나와있는 docker run 코드 부분을 이해하여, 직접 수정, 사용하기를 권장합니다.
 
 <pre><code>
-sudo docker run -d --runtime=nvidia -v /home/$(USER)/:/home/$(USER)/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+
+sudo docker run -d --runtime=nvidia -v /:/host_data/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+
 </code></pre>
 
 - '-d' : 백그라운드에서 실행
@@ -91,6 +93,8 @@ docker container를 test할때는 -d를 지우고 실행하여도 무방, docker
 -v를 이용하여 host-pc의 다른 주소를 연결하여 사용할수도 있고 docker cp문을 이용하여 docker container 내부로 복사하여 사용할수도 있습니다. 다만 앞서 언급했듯이 복사와 마운트의 차이는 container가 종료되면 cp로 복사된 정보는 마운트되어있지 않은 주소에 존재하면 삭제됩니다.
 
 추가적으로 여러 container를 사용할때 link문법이라던지 docker-swarm 등에 대한 기능을 추가적으로 업로드 예정입니다.
+
+-v /:/host_data/에서 보이는 것 처럼 host_pc의 데이터는 /host_data/에 마운트 하여 사용가능하게 하였으나 여러명이서 개발할때는 보통 특정 구역, 폴더만을 마운트하여 사용하는 편이 더 바람직한 개발 방식입니다.
 
 <pre><code>
 sudo docker exec -ti $(IMAGE_NAME) /bin/bash
@@ -110,4 +114,5 @@ sudo make build_image_again
 sudo sh erase_all_images_containers.sh && \
 sudo make build_image_again
 </code></pre>
+
 erase_all_images_containers.sh는 활성화되어 있지 않은 모든 image와 containers를 지웁니다.

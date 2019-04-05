@@ -188,5 +188,5 @@ RUN source /root/.bashrc
 
 RUN wget https://github.com/pytorch/pytorch
 RUN pip3 install numpy pyyaml mkl mkl-include setuptools cmake cffi typing
-RUN cd pytorch
+#RUN cd pytorch
 RUN pip3 install torch torchvision

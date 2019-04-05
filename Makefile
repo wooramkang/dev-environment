@@ -14,7 +14,7 @@ build_image_again:
 	sudo docker rmi $(IMAGE_NAME)
 	sudo docker build -t $(IMAGE_NAME) .
 	#  					     "/home/username/..."
-	sudo docker run -d --runtime=nvidia -v /home/$(USER)/:/home/$(USER)/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+	sudo docker run -d --runtime=nvidia -v /:/host_data/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
 
 build_only_image:
 
@@ -23,10 +23,12 @@ build_only_image:
 
 	#for build
 	sudo docker build -t $(IMAGE_NAME) .
+	sudo docker run -d --runtime=nvidia -v /:/host_data/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+
 	#  					     "/home/username/..."
 #	sudo docker run -d --runtime=nvidia --volume="/home/$(USER)/.Xauthority:/root/.Xauthority:rw" --#env="DISPLAY" --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
 
-	sudo docker run -d --runtime=nvidia -v /home/$(USER)/:/home/$(USER)/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+	#sudo docker run -d --runtime=nvidia -v /home/$(USER)/:/home/$(USER)/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
 
 #sudo docker run -d --runtime=nvidia -v /home/$(USER)/recognition_research/:/CODE/ -v /home/$(USER)/.Xauthority:/#root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name #$(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
 
@@ -91,8 +93,8 @@ build_first_time:
 	#cuda버전을 명시하지 않을경우 최신 버전을 실행시키므로 오류가 발생
 	sudo docker run --runtime=nvidia --rm nvidia/cuda:9.0-base nvidia-smi
 	sudo docker build -t $(IMAGE_NAME) .	
-	#  					     "/home/username/...
-	sudo docker run -d --runtime=nvidia -v /home/$(USER)/:/home/$(USER)/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+	sudo docker run -d --runtime=nvidia -v /:/host_data/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+	#sudo docker run -d --runtime=nvidia -v /home/$(USER)/:/home/$(USER)/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
 
 
 #how to transfer files 
