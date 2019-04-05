@@ -1,6 +1,7 @@
 # set name for envirments you want
 
-IMAGE_NAME=env_baseline
+IMAGE_NAME=base_p35_c90
+
 
 run_bash:
 	#GUI POSSIBLE
@@ -9,10 +10,11 @@ run_bash:
 build_image_again:
 	#for build
 	sudo docker kill $(IMAGE_NAME) 
+	sudo docker rm $(IMAGE_NAME)
 	sudo docker rmi $(IMAGE_NAME)
 	sudo docker build -t $(IMAGE_NAME) .
 	#  					     "/home/username/..."
-	sudo docker run -d --runtime=nvidia --volume="/home/rd/.Xauthority:/root/.Xauthority:rw" --env="DISPLAY" --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+	sudo docker run -d --runtime=nvidia -v /home/$(USER)/:/home/$(USER)/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
 
 build_only_image:
 
@@ -22,22 +24,33 @@ build_only_image:
 	#for build
 	sudo docker build -t $(IMAGE_NAME) .
 	#  					     "/home/username/..."
-	sudo docker run -d --runtime=nvidia --volume="/home/rd/.Xauthority:/root/.Xauthority:rw" --env="DISPLAY" --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+#	sudo docker run -d --runtime=nvidia --volume="/home/$(USER)/.Xauthority:/root/.Xauthority:rw" --#env="DISPLAY" --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+
+	sudo docker run -d --runtime=nvidia -v /home/$(USER)/:/home/$(USER)/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+
+#sudo docker run -d --runtime=nvidia -v /home/$(USER)/recognition_research/:/CODE/ -v /home/$(USER)/.Xauthority:/#root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name #$(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
 
 build_first_time:
 	#for build
-	
-	sudo apt-get remove docker docker-engine docker.io
+	#sudo apt-get remove docker docker-engine docker.io
+	sudo apt-get -f install
 	sudo apt-get purge docker*
-
+	sudo apt-get update
+	sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
 	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-	sudo add-apt-repository \
-        "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
-
+	apt-key fingerprint 0EBFCD88
+	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+	cat /etc/apt/sources.list | grep docker
 	sudo apt-get update	
-	sudo apt install docker-ce
-	sudo apt-get install docker docker-engine docker.io
+
+	sudo apt install -y docker-ce
+	#sudo groupadd docker
+	#sudo usermod -aG docker $ USER
+	#sudo apt-get install -y docker docker-engine docker.io
+	#docker run --runtime=nvidia --rm nvidia/cuda nvidia-smi 이 실행되지 않으므로 아래 서비스등록을 실행해야함
+	sudo rm -Rf /usr/lib/systemd/system
 	sudo mkdir /usr/lib/systemd/system
+	sudo chown -R $(USER) /usr/lib/systemd/system
 	sudo echo "[Unit]\n\
 	Description=NVIDIA Persistence Daemon\n\
 	Wants=syslog.target\n\
@@ -51,30 +64,35 @@ build_first_time:
 	\n\
 	[Install]\n\
 	WantedBy=multi-user.target" > /usr/lib/systemd/system/nvidia-persistenced.service 
-
 	sudo systemctl enable nvidia-persistenced
 	
 	docker volume ls -q -f driver=nvidia-docker | xargs -r -I{} -n1 docker ps -q -a -f volume={} | xargs -r docker rm -f
-	sudo apt-get purge -y nvidia-docker
-	
+	#nvidia-docker가 설치되어있을 경우 아래 주석제거
+	#sudo apt-get purge -y nvidia-docker
+	#sudo apt-get purge -y nvidia-docker2
+		
+
 	curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | \
 	sudo apt-key add -
+	#ubuntu 16.04를 정의
 	distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-	curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | \
-	sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+	#curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | \
+	#sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+	curl -s -L https://nvidia.github.io/nvidia-docker/ubuntu16.04/amd64/nvidia-docker.list | \
+	sudo tee /etc/apt/sources.list.d/nvidia-docker.list 
 	sudo apt-get update
 	gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 9BDB3D89CE49EC21
 	sudo apt-get update
 
-	sudo apt-get install -y nvidia-docker
+	#sudo apt-get install -y nvidia-docker
 	sudo apt-get install -y nvidia-docker2
 	sudo pkill -SIGHUP dockerd
 	#ls -la /dev | grep nvidia
-
+	#cuda버전을 명시하지 않을경우 최신 버전을 실행시키므로 오류가 발생
 	sudo docker run --runtime=nvidia --rm nvidia/cuda:9.0-base nvidia-smi
-	sudo docker build -t $(IMAGE_NAM)E .	
+	sudo docker build -t $(IMAGE_NAME) .	
 	#  					     "/home/username/...
-	sudo docker run -d --runtime=nvidia --volume="/home/rd/.Xauthority:/root/.Xauthority:rw" --env="DISPLAY" --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+	sudo docker run -d --runtime=nvidia -v /home/$(USER)/:/home/$(USER)/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
 
 
 #how to transfer files 
