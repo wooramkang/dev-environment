@@ -14,6 +14,7 @@ ARG CUDA
 
 ENV DEBIAN_FRONTEND noninteractive
 LABEL maintainer "omelisra123@gmail.com"
+LABEL maintainer_COMPANY "support@returnable.com"
 
 RUN apt-get update && \
     apt-get -y install \
@@ -173,8 +174,8 @@ RUN pkg-config --libs --cflags dlib-1
 RUN cd dlib-19.15 && \
     python3 setup.py install
 
-RUN apt-get install -qqy x11-apps
-RUN apt-get -y install gedit
+RUN apt-get install -y -qqy x11-apps
+RUN apt-get install -y gedit
 
 RUN mkdir /opt/pycharm
 RUN cd /opt/pycharm
@@ -188,5 +189,5 @@ RUN source /root/.bashrc
 
 RUN wget https://github.com/pytorch/pytorch
 RUN pip3 install numpy pyyaml mkl mkl-include setuptools cmake cffi typing
-#RUN cd pytorch
 RUN pip3 install torch torchvision
+RUN pip3 install numpy matplotlib glob3 h5py 

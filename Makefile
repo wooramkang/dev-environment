@@ -34,15 +34,27 @@ build_only_image:
 
 build_first_time:
 	#for build
-	#sudo apt-get remove docker docker-engine docker.io
+
+	export TIMEZONE=UTC
+	sudo cp /usr/share/zoneinfo/UTC /etc/localtime
+	sudo echo "UTC" | sudo tee /etc/timezone
+	sudo dpkg-reconfigure --frontend noninteractive tzdata
+	#apt-get update  
+	sudo add-apt-repository -y ppa:mc3man/xerus-media
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CF9BDC6F03D1F02B
+	gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 9BDB3D89CE49EC21
+	gpg --export --armor 9BDB3D89CE49EC21 | sudo apt-key add -
 	sudo apt-get -f install
 	sudo apt-get purge docker*
+	sudo apt-get upgrade -y
 	sudo apt-get update
 	sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
 	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 	apt-key fingerprint 0EBFCD88
-	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-	cat /etc/apt/sources.list | grep docker
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 762E3157
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ACCAF35C
+	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
+	#sudo cat /etc/apt/sources.list | grep docker
 	sudo apt-get update	
 
 	sudo apt install -y docker-ce
