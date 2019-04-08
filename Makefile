@@ -1,10 +1,13 @@
 # set name for envirments you want
 
 IMAGE_NAME=base_p35_c90
+USER_NAME = $(USER)
 
-
+run_test:
+	echo $(USER_NAME)
 run_bash:
 	#GUI POSSIBLE
+	#sudo docker start $(IMAGE_NAME)
 	sudo docker exec -ti $(IMAGE_NAME) /bin/bash
 
 build_image_again:
@@ -14,7 +17,7 @@ build_image_again:
 	sudo docker rmi $(IMAGE_NAME)
 	sudo docker build -t $(IMAGE_NAME) .
 	#  					     "/home/username/..."
-	sudo docker run -d --runtime=nvidia -v /:/host_data/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+	sudo docker run -d--runtime=nvidia -v /:/host_data/ -v /home/$(USER_NAME)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
 
 build_only_image:
 
@@ -23,7 +26,7 @@ build_only_image:
 
 	#for build
 	sudo docker build -t $(IMAGE_NAME) .
-	sudo docker run -d --runtime=nvidia -v /:/host_data/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+	sudo docker run --runtime=nvidia -v /:/host_data/ --privileged -v /dev/:/dev/ -v /home/$(USER_NAME)/.Xauthority:/root/.Xauthority:rw --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
 
 	#  					     "/home/username/..."
 #	sudo docker run -d --runtime=nvidia --volume="/home/$(USER)/.Xauthority:/root/.Xauthority:rw" --#env="DISPLAY" --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
@@ -64,7 +67,7 @@ build_first_time:
 	#docker run --runtime=nvidia --rm nvidia/cuda nvidia-smi 이 실행되지 않으므로 아래 서비스등록을 실행해야함
 	sudo rm -Rf /usr/lib/systemd/system
 	sudo mkdir /usr/lib/systemd/system
-	sudo chown -R $(USER) /usr/lib/systemd/system
+	sudo chown -R $(USER_NAME) /usr/lib/systemd/system
 	sudo echo "[Unit]\n\
 	Description=NVIDIA Persistence Daemon\n\
 	Wants=syslog.target\n\
@@ -105,7 +108,7 @@ build_first_time:
 	#cuda버전을 명시하지 않을경우 최신 버전을 실행시키므로 오류가 발생
 	sudo docker run --runtime=nvidia --rm nvidia/cuda:9.0-base nvidia-smi
 	sudo docker build -t $(IMAGE_NAME) .	
-	sudo docker run -d --runtime=nvidia -v /:/host_data/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
+	sudo docker run --runtime=nvidia -v /:/host_data/ --privileged -v /dev/:/dev/ -v /home/$(USER_NAME)/.Xauthority:/root/.Xauthority:rw --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
 	#sudo docker run -d --runtime=nvidia -v /home/$(USER)/:/home/$(USER)/ -v /home/$(USER)/.Xauthority:/root/.Xauthority:rw --privileged -v /dev/:/dev/ --env "DISPLAY" --env QT_X11_NO_MITSHM=1 --net=host -ti --name $(IMAGE_NAME) $(IMAGE_NAME) /bin/bash
 
 
