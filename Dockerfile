@@ -14,7 +14,6 @@ ARG CUDA
 
 ENV DEBIAN_FRONTEND noninteractive
 LABEL maintainer "omelisra123@gmail.com"
-LABEL maintainer_COMPANY "support@returnable.com"
 
 RUN apt-get update && \
     apt-get -y install \
